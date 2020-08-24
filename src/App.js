@@ -33,6 +33,10 @@ function App() {
     const response = await api.delete(`repositories/${id}`)
 
     repositories.splice(response, 1);
+
+      api.get('repositories').then(response => {
+      setRepository(response.data);
+    });
   }
 
   return (
@@ -40,7 +44,7 @@ function App() {
       <ul data-testid="repository-list">
         {repositories.map(repository =>
           <li key={repository.id}>{repository.title}
-            <button onClick={() => handleRemoveRepository(1)}>Remover</button>
+            <button onClick={() => handleRemoveRepository(repository.id)}>Remover</button>
           </li>
         )}
       </ul>
