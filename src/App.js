@@ -33,10 +33,10 @@ function App() {
     const response = await api.delete(`repositories/${id}`)
 
     repositories.splice(response, 1);
-    /*
+    
     api.get('repositories').then(response => {
     setRepository(response.data);
-    });*/
+    });
   }
 
   return (
