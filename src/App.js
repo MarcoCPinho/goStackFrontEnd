@@ -4,11 +4,11 @@ import api from './services/api';
 import "./styles.css";
 
 function App() {
-  const [repositories, setRepository] = useState([]);
+  const [repositories, setRepositories] = useState([]);
 
   useEffect(() => {
     api.get('repositories').then(response => {
-      setRepository(response.data);
+      setRepositories(response.data);
     });
   }, [])
 
@@ -23,30 +23,30 @@ function App() {
       ]
     });
 
-    const repository = response.data;
-
-    setRepository([...repositories, repository]);
+    setRepositories([...repositories, response.data]);
   }
 
   async function handleRemoveRepository(id) {
+    await api.delete(`repositories/${id}`)
 
-    const response = await api.delete(`repositories/${id}`)
-
-    repositories.splice(response, 1);
-    
-    api.get('repositories').then(response => {
-    setRepository(response.data);
-    });
+    setRepositories(repositories.filter(
+      repository => repository.id != id
+    ))
   }
 
   return (
     <div>
       <ul data-testid="repository-list">
-        {repositories.map(repository =>
-          <li key={repository.id}>{repository.title}
-            <button onClick={() => handleRemoveRepository(repository.id)}>Remover</button>
+        {repositories.map(repository => (
+          <li key={repository.id}>
+            {repository.title}
+
+            <button onClick={() => handleRemoveRepository(repository.id)}>
+              Remover
+            </button>
           </li>
-        )}
+
+        ))}
       </ul>
       <button onClick={handleAddRepository}>Adicionar</button>
     </div>
